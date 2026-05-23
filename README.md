@@ -1,1 +1,2 @@
 # RoutePlanner
+Contact Route Planner is a full-stack React web application that allows users to enter contact names and addresses, store them in a database, and automatically group contacts by geographic proximity. The goal is to help a user plan efficient in-person visits by identifying contacts located near one another. The Phase 1 MVP focuses on contact entry, database storage, address geocoding, distance calculation, and grouped contact display.
