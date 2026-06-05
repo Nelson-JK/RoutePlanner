@@ -11,7 +11,7 @@ from geocode import geocode_address
 from grouping import group_contacts
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 create_table()
 
