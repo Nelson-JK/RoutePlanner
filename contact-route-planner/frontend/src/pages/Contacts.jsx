@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 
 function Contacts() {
   const [contacts, setContacts] = useState([]);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
   const [formData, setFormData] = useState({
     name: "",
     street: "",
@@ -10,13 +13,18 @@ function Contacts() {
     zip: ""
   });
 
-const API_URL = "/api/contacts";
+  const API_URL = "/api/contacts";
 
   const loadContacts = () => {
     fetch(API_URL)
       .then((response) => response.json())
-      .then((data) => setContacts(data))
-      .catch((error) => console.error("Error loading contacts:", error));
+      .then((data) => {
+        setContacts(data);
+        setError("");
+      })
+      .catch(() => {
+        setError("Unable to load contacts.");
+      });
   };
 
   useEffect(() => {
@@ -33,36 +41,69 @@ const API_URL = "/api/contacts";
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(formData)
-    });
+    if (!formData.name.trim()) {
+      setError("Please enter a contact name.");
+      setMessage("");
+      return;
+    }
 
-    setFormData({
-      name: "",
-      street: "",
-      city: "",
-      state: "",
-      zip: ""
-    });
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
 
-    loadContacts();
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      setMessage("Contact added successfully.");
+      setError("");
+
+      setFormData({
+        name: "",
+        street: "",
+        city: "",
+        state: "",
+        zip: ""
+      });
+
+      loadContacts();
+    } catch {
+      setError("Unable to add contact.");
+      setMessage("");
+    }
   };
 
   const handleDelete = async (id) => {
-    await fetch(`${API_URL}/${id}`, {
-      method: "DELETE"
-    });
+    try {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE"
+      });
 
-    loadContacts();
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      setMessage("Contact deleted successfully.");
+      setError("");
+
+      loadContacts();
+    } catch {
+      setError("Unable to delete contact.");
+      setMessage("");
+    }
   };
 
   return (
     <div>
       <h1>Contacts</h1>
+
+      {message && <p style={{ color: "green" }}>{message}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
       <h2>Add Contact</h2>
 
