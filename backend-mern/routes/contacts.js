@@ -1,6 +1,7 @@
 import express from "express";
 import Contact from "../models/Contact.js";
 
+import { geocodeAddress } from "../utils/geocode.js";
 const router = express.Router();
 
 // GET all contacts
@@ -38,16 +39,34 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST create contact
+// POST create contact
 router.post("/", async (req, res) => {
   try {
-    const newContact = new Contact(req.body);
+    const { name, street, city, state, zip } = req.body;
+
+    const { latitude, longitude } = await geocodeAddress(
+      street,
+      city,
+      state,
+      zip
+    );
+
+    const newContact = new Contact({
+      name,
+      street,
+      city,
+      state,
+      zip,
+      latitude,
+      longitude
+    });
 
     const savedContact = await newContact.save();
 
     res.status(201).json(savedContact);
   } catch (error) {
     res.status(400).json({
-      message: error.message,
+      message: error.message
     });
   }
 });
