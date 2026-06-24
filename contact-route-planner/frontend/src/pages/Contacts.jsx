@@ -102,50 +102,106 @@ function Contacts() {
     <div>
       <h1>Contacts</h1>
 
-      {message && <p style={{ color: "green" }}>{message}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {message && (
+        <p className="success">
+          {message}
+        </p>
+      )}
 
-      <h2>Add Contact</h2>
+      {error && (
+        <p className="error">
+          {error}
+        </p>
+      )}
 
-      <form onSubmit={handleSubmit}>
-        <input name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
-        <br /><br />
+      <div className="two-column">
+        <div className="card">
+          <h2>Add Contact</h2>
 
-        <input name="street" placeholder="Street" value={formData.street} onChange={handleChange} />
-        <br /><br />
+          <form onSubmit={handleSubmit}>
+            <input
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+            />
 
-        <input name="city" placeholder="City" value={formData.city} onChange={handleChange} />
-        <br /><br />
+            <br />
 
-        <input name="state" placeholder="State" value={formData.state} onChange={handleChange} />
-        <br /><br />
+            <input
+              name="street"
+              placeholder="Street"
+              value={formData.street}
+              onChange={handleChange}
+            />
 
-        <input name="zip" placeholder="Zip" value={formData.zip} onChange={handleChange} />
-        <br /><br />
+            <br />
 
-        <button type="submit">Add Contact</button>
-      </form>
+            <input
+              name="city"
+              placeholder="City"
+              value={formData.city}
+              onChange={handleChange}
+            />
 
-      <h2>Saved Contacts</h2>
+            <br />
 
-      {contacts.map((contact) => (
-        <div
-          key={contact._id}
-          style={{
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            padding: "12px",
-            marginBottom: "10px"
-          }}
-        >
-          <strong>{contact.name}</strong>
-          <p>
-            {contact.street}, {contact.city}, {contact.state} {contact.zip}
-          </p>
+            <input
+              name="state"
+              placeholder="State"
+              value={formData.state}
+              onChange={handleChange}
+            />
 
-          <button onClick={() => handleDelete(contact._id)}>Delete</button>
+            <br />
+
+            <input
+              name="zip"
+              placeholder="Zip"
+              value={formData.zip}
+              onChange={handleChange}
+            />
+
+            <br />
+            <br />
+
+            <button type="submit">
+              Add Contact
+            </button>
+          </form>
         </div>
-      ))}
+
+        <div className="card">
+          <h2>Saved Contacts</h2>
+
+          {contacts.length === 0 ? (
+            <p>No contacts found.</p>
+          ) : (
+            contacts.map((contact) => (
+              <div
+                key={contact._id}
+                className="card"
+              >
+                <strong>{contact.name}</strong>
+
+                <p>
+                  {contact.street}
+                  <br />
+                  {contact.city}, {contact.state} {contact.zip}
+                </p>
+
+                <button
+                  onClick={() =>
+                    handleDelete(contact._id)
+                  }
+                >
+                  Delete
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 }

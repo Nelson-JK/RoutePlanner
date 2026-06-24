@@ -7,7 +7,6 @@ function Groups() {
     fetch("/api/groups")
       .then((response) => response.json())
       .then((data) => {
-        console.log("Groups loaded:", data);
         setGroups(data);
       })
       .catch((error) =>
@@ -24,19 +23,16 @@ function Groups() {
       <h1>Contact Groups</h1>
 
       {groups.length === 0 ? (
-        <p>No groups found.</p>
+        <div className="card">
+          <p>No groups found.</p>
+        </div>
       ) : (
         groups.map((group, index) => (
           <div
             key={index}
-            style={{
-              border: "2px solid #aaa",
-              borderRadius: "10px",
-              padding: "15px",
-              marginBottom: "20px"
-            }}
+            className="card"
           >
-            <h3>Group {index + 1}</h3>
+            <h2>Group {index + 1}</h2>
 
             <p>
               {group.length} contact
@@ -46,12 +42,7 @@ function Groups() {
             {group.map((contact) => (
               <div
                 key={contact._id}
-                style={{
-                  border: "1px solid #ddd",
-                  borderRadius: "6px",
-                  padding: "8px",
-                  marginBottom: "8px"
-                }}
+                className="card"
               >
                 <strong>{contact.name}</strong>
 
